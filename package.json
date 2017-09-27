@@ -23,7 +23,7 @@
     "cors": "^2.3.1",
     "express": "^4.2.0",
     "node-vincenty": "0.0.6",
-    "request": "^2.35.0",
+    "request": "2.81.0",
     "request-callback-wrapper": "^1.0.2"
   },
   "devDependencies": {
