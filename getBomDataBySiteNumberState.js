@@ -1,6 +1,6 @@
-var request = require('request'),
-    wrapCallback = require('request-callback-wrapper'),
-    safeParse = require('safe-json-parse/callback');
+var request = require('request');
+var wrapCallback = require('request-callback-wrapper');
+var safeParse = require('safe-json-parse/callback');
 
 var IDCodes = {
     tas: 'IDT60801',
@@ -16,8 +16,8 @@ var IDCodes = {
 function getBomDataBySiteNumberState(siteNumber, stateName, callback) {
     var url = 'http://www.bom.gov.au/fwo/' + IDCodes[stateName] + '/' + IDCodes[stateName] + '.' + siteNumber + '.json';
 
-    request({url:url, json: true}, wrapCallback(function(error, data) {
-        if(error || !data || !data.observations || !data.observations.data){
+    request({ url: url, json: true }, wrapCallback(function(error, data) {
+        if (error || !data || !data.observations || !data.observations.data) {
             return callback('Incorrect state and siteNumber combination: ' + error);
         }
 
@@ -25,16 +25,20 @@ function getBomDataBySiteNumberState(siteNumber, stateName, callback) {
         var bomInfoArray = [];
 
         for (var i = 0; i < observationData.length; i++) {
+            var observation = observationData[i];
 
             var bomInfo = {
-                air_temp: observationData[i].air_temp,
-                apparent_t: observationData[i].apparent_t,
-                rel_hum: observationData[i].rel_hum,
-                local_date_time_full: observationData[i].local_date_time_full,
-                utc_date_time_full: observationData[i].aifstime_utc
+                air_temp: observation.air_temp,
+                apparent_t: observation.apparent_t,
+                rel_hum: observation.rel_hum,
+                local_date_time_full: observation.local_date_time_full,
+                utc_date_time_full: observation.aifstime_utc,
+                dew_point: observation.dewpt
             };
+
             bomInfoArray.push(bomInfo);
         }
+
         callback(null, bomInfoArray);
     }));
 }
